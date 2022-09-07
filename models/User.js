@@ -78,11 +78,6 @@ userSchema.methods.generateAuthToken = async function () {
     return token
 }
 
-userSchema.methods.seeVerifiedRoutes = function (path) {
-    const user = this
-    // * check all routes user model can access
-}
-
 
 userSchema.methods.toJSON = function () {
     const user = this
