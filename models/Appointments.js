@@ -1,6 +1,14 @@
 const mongoose = require('mongoose')
 
 const appointmentSchema = new mongoose.Schema({
+    customer: {
+        type: String,
+        trim: true
+    },
+    nurse: {
+        type: String,
+        trim: true
+    },
     details: {
         type: String,
         trim: true,
@@ -14,7 +22,6 @@ const appointmentSchema = new mongoose.Schema({
     pin: {
         type: Number,
         trim: true,
-        required: true
     },
     comepleted: {
         type: Boolean,

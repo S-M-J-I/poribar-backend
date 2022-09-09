@@ -58,19 +58,6 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 })
 
-// customer who is making appointment
-userSchema.virtual('appointments', {
-    ref: 'Appointments',
-    localField: '_id',
-    foreignField: 'customer'
-})
-
-// customer who is paying
-userSchema.virtual('payments', {
-    ref: 'Payment',
-    localField: '_id',
-    foreignField: 'payed_by'
-})
 
 userSchema.methods.generateAuthToken = async function () {
     const user = this

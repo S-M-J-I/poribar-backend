@@ -65,20 +65,13 @@ const nurseSchema = new mongoose.Schema({
     timestamps: true
 })
 
-// nurse who is accepting appointment
-nurseSchema.virtual('appointments', {
-    ref: 'Appointments',
-    localField: '_id',
-    foreignField: 'nurse'
-})
+nurseSchema.methods.updateBalance = async function (amount) {
+    const nurse = this
 
-// nurse who is being payed
-nurseSchema.virtual('payments', {
-    ref: 'Payment',
-    localField: '_id',
-    foreignField: 'payed_to'
-})
+    nurse.balance += amount
+    await nurse.save()
 
+}
 
 // hash password before saving
 nurseSchema.pre('save', async function (next) {
