@@ -77,9 +77,10 @@ router.post('/nurse/signup', async (req, res) => {
 })
 
 
-router.post('/user/profile', auth, async (req, res) => {
+router.post('/user/profile', async (req, res) => {
+    console.log(req.body)
     try {
-        const user = await User.findOne({ uid: req.body.uid })
+        const user = await User.findOne({ 'uid': req.body.uid })
         res.status(200).send(user)
     } catch (err) {
         res.status(500).send("Something went wrong")
