@@ -39,6 +39,10 @@ const userSchema = new mongoose.Schema({
             }
         }
     },
+    phone: {
+        type: String,
+        trim: true
+    },
     address: {
         type: String,
         trim: true
@@ -76,11 +80,6 @@ userSchema.methods.generateAuthToken = async function () {
     await user.save()
 
     return token
-}
-
-userSchema.methods.seeVerifiedRoutes = function (path) {
-    const user = this
-    // * check all routes user model can access
 }
 
 
