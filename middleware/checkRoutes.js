@@ -1,4 +1,4 @@
-modules.exports = function (path, type) {
+module.exports = function (path, type) {
 
     // * check all routes user model can access
     if (type === "user") {

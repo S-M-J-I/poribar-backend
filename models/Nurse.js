@@ -2,10 +2,20 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 
 const nurseSchema = new mongoose.Schema({
+    uid: {
+        type: String,
+        trim: true
+    },
     name: {
         type: String,
         required: true,
         trim: true
+    },
+    username: {
+        type: String,
+        required: true,
+        trim: true,
+        unique: true
     },
     email: {
         type: String,
@@ -28,9 +38,12 @@ const nurseSchema = new mongoose.Schema({
             }
         }
     },
+    phone: {
+        type: String,
+        trim: true
+    },
     address: {
         type: String,
-        required: true,
         trim: true
     },
     balance: {
@@ -41,14 +54,12 @@ const nurseSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    tokens: [{
-        token: {
-            type: String,
-            required: true
-        }
-    }],
     avatar: {
-        type: Buffer
+        type: String,
+    },
+    ext: {
+        type: String,
+        default: '.jpg'
     }
 }, {
     timestamps: true

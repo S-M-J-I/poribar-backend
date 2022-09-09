@@ -2,7 +2,7 @@ require('../firebase/firebaseAuth')
 const User = require('../models/User')
 const Nurse = require('../models/Nurse')
 const checkRoutes = require('../middleware/checkRoutes')
-const fetch = require('node-fetch')
+
 
 const auth = (req, res, next) => {
     if (req.body.token) {
@@ -28,15 +28,7 @@ const auth = (req, res, next) => {
 
                     if (auth_status === 1) {
                         // redir to path
-                        fetch(path, {
-                            method: 'POST',
-                            body: JSON.stringify(req.body),
-                            headers: { 'Content-Type': 'application/json' }
-                        })
-                            .then(res => res.json())
-                            .then(json => {
 
-                            })
                     } else if (auth_status === 2) {
                         // redir to path
                     }
