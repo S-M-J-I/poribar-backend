@@ -6,17 +6,17 @@ const uploadEvent = multer({ dest: 'images/events' })
 const path = require('path')
 const image_dirs = require('../middleware/image_filter')
 
-
+const fs = require('fs')
 router.post('/create', uploadEvent.single('photo'), async (req, res) => {
     try {
+        console.log(req.body)
         const event = new Event({
             ...req.body,
             photo: req.file.filename,
             ext: req.file.originalname.split('.')[1]
         })
-
         await event.save()
-        res.status(200).send("Registered Event")
+        res.status(200).send({msg:'confirmed'})
     } catch (err) {
         res.status(500).send(err)
     }
@@ -28,7 +28,8 @@ router.post('/all', async (req, res) => {
         Event.find({}).sort('-date').exec((err, docs) => {
             docs.forEach(event => {
                 const { _id, name, date, description, location, photo } = event
-                let fileBuffer = Buffer.from(photo, 'base64')
+                
+                let fileBuffer = fs.readFileSync(path.join(__dirname, '../', `images/events/${photo}`), 'base64')
                 events.push({
                     _id, name, date, description, location, fileBuffer
                 })
