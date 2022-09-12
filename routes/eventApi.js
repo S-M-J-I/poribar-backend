@@ -16,19 +16,20 @@ router.post('/create', uploadEvent.single('photo'), async (req, res) => {
             ext: req.file.originalname.split('.')[1]
         })
         await event.save()
-        res.status(200).send({msg:'confirmed'})
+        res.status(200).send({ msg: 'confirmed' })
     } catch (err) {
         res.status(500).send(err)
     }
 })
 
+// get all events
 router.post('/all', async (req, res) => {
     try {
         let events = []
         Event.find({}).sort('-date').exec((err, docs) => {
             docs.forEach(event => {
                 const { _id, name, date, description, location, photo } = event
-                
+
                 let fileBuffer = fs.readFileSync(path.join(__dirname, '../', `images/events/${photo}`), 'base64')
                 events.push({
                     _id, name, date, description, location, fileBuffer
@@ -42,7 +43,7 @@ router.post('/all', async (req, res) => {
     }
 })
 
-
+// fetch individual events
 router.post('/:id', async (req, res) => {
     const id = req.params.id
     try {
@@ -53,6 +54,7 @@ router.post('/:id', async (req, res) => {
     }
 })
 
+// fetch individual image
 router.post('/image/:id', async (req, res) => {
     const id = req.params.id
     try {
@@ -73,6 +75,17 @@ router.post('/image/:id', async (req, res) => {
             res.status(500).send(err)
         })
 
+    } catch (err) {
+        res.status(500).send(err)
+    }
+})
+
+// delete event
+router.post('/delete', async (req, res) => {
+    try {
+        // pass event _id in body to delete
+        await Event.deleteOne({ _id: req.body._id })
+        res.status(200).send({ message: "Event Deleted" })
     } catch (err) {
         res.status(500).send(err)
     }

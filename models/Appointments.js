@@ -23,6 +23,14 @@ const appointmentSchema = new mongoose.Schema({
         type: Number,
         trim: true,
     },
+    accepted: {
+        type: Boolean,
+        default: false
+    },
+    ongoing: {
+        type: Boolean,
+        default: false
+    },
     comepleted: {
         type: Boolean,
         default: false

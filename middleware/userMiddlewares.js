@@ -1,6 +1,8 @@
 const User = require('../models/User')
 const Nurse = require('../models/Nurse')
 const admin = require('../firebase/firebaseAuth')
+const fs = require('fs')
+const path = require('path')
 
 const saveUser = async (body, avatar_file, type) => {
     const data = Object.assign({}, body)
@@ -46,9 +48,13 @@ const saveUser = async (body, avatar_file, type) => {
 const getUser = async (uid, type) => {
     if (type === "user") {
         const user = await User.findOne({ uid: uid })
+        let imageFileBuffer = fs.readFileSync(path.join(__dirname, '../', `images/avatar/${user.avatar}`), 'base64')
+        user.avatar = imageFileBuffer
         return user
     } else if (type === "nurse") {
         const user = await Nurse.findOne({ uid: uid })
+        let imageFileBuffer = fs.readFileSync(path.join(__dirname, '../', `images/avatar/${user.avatar}`), 'base64')
+        user.avatar = imageFileBuffer
         return user
     }
 }

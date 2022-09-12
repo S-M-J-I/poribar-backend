@@ -10,7 +10,7 @@ const userAuthRoutes = require('./routes/userApi')
 const nurseAuthRoutes = require('./routes/nurseApi')
 const eventRoutes = require('./routes/eventApi')
 const paymentRoutes = require('./routes/paymentsApi')
-const appointmentRoutes = require('./routes/appointmentRoutes')
+const appointmentRoutes = require('./routes/appointmentApi')
 
 // app.use(express.json())
 app.use(cors({ origin: '*' }))
