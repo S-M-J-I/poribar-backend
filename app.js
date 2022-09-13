@@ -11,6 +11,7 @@ const nurseAuthRoutes = require('./routes/nurseApi')
 const eventRoutes = require('./routes/eventApi')
 const paymentRoutes = require('./routes/paymentsApi')
 const appointmentRoutes = require('./routes/appointmentApi')
+const forumPostRoutes = require('./routes/forumPostApi')
 
 // app.use(express.json())
 app.use(cors({ origin: '*' }))
@@ -22,7 +23,11 @@ app.use('/api/auth/nurse/', nurseAuthRoutes)
 app.use('/api/events/', eventRoutes)
 app.use('/api/appointments/', appointmentRoutes)
 app.use('/api/payments/', paymentRoutes)
+app.use('/api/forums/post/', forumPostRoutes)
 
+app.use('*', (req, res) => {
+    res.status(404).send({ messsage: 'Not Found' })
+})
 
 app.listen(process.env.PORT, () => {
     console.log("Server is up")

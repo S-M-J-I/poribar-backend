@@ -11,6 +11,10 @@ const eventSchema = mongoose.Schema({
         trim: true,
         required: true
     },
+    date_time: {
+        type: String,
+        trim: true
+    },
     description: {
         type: String,
         trim: true,
@@ -34,6 +38,22 @@ const eventSchema = mongoose.Schema({
 }, {
     timestamps: true
 })
+
+eventSchema.pre('save', async function (next) {
+    const event = this
+    const dateTime = event.date
+
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: "2-digit" };
+    const datetimestring = dateTime.toLocaleDateString('en-US', options)
+    const timestring = datetimestring.split(',')
+
+    const formatString = `${timestring[0]}, ${timestring[1]}, ${timestring[2]} AT ${timestring[3]}`
+    event.date_time = formatString
+
+    next()
+})
+
+
 
 const Event = mongoose.model('Event', eventSchema)
 
