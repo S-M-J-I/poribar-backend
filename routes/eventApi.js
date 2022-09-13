@@ -27,14 +27,18 @@ router.post('/all', async (req, res) => {
     try {
         let events = []
         Event.find({}).sort('-date').exec((err, docs) => {
-            docs.forEach(event => {
-                const { _id, name, date, description, location, photo } = event
+            try{
+                docs.forEach(event => {
+                    const { _id, name, date, description, location, photo } = event
 
-                let fileBuffer = fs.readFileSync(path.join(__dirname, '../', `images/events/${photo}`), 'base64')
-                events.push({
-                    _id, name, date, description, location, fileBuffer
+                    let fileBuffer = fs.readFileSync(path.join(__dirname, '../', `images/events/${photo}`), 'base64')
+                    events.push({
+                        _id, name, date, description, location, fileBuffer
+                    })
                 })
-            })
+            } catch(err) {
+                console.log(err)
+            }   
             res.status(200).send(events)
         })
 
@@ -48,6 +52,7 @@ router.post('/:id', async (req, res) => {
     const id = req.params.id
     try {
         const event = await Event.findOne({ _id: id })
+        event.photo = fs.readFileSync(path.join(__dirname, '../', `images/events/${event.photo}`), 'base64')
         res.send(event)
     } catch (err) {
         res.status(500).send(err)
