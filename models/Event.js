@@ -47,7 +47,7 @@ eventSchema.pre('save', async function (next) {
     const datetimestring = dateTime.toLocaleDateString('en-US', options)
     const timestring = datetimestring.split(',')
 
-    const formatString = `${timestring[0]}, ${timestring[1]}, ${timestring[2]} AT ${timestring[3]}`
+    const formatString = `${timestring[0]}, ${timestring[1]}, ${timestring[2]}`
     event.date_time = formatString
 
     next()

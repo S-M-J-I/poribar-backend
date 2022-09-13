@@ -29,11 +29,11 @@ router.post('/all', async (req, res) => {
         Event.find({}).sort('-date').exec((err, docs) => {
             try{
                 docs.forEach(event => {
-                    const { _id, name, date, description, location, photo } = event
+                    const { _id, name, date, description, location, photo,date_time } = event
 
                     let fileBuffer = fs.readFileSync(path.join(__dirname, '../', `images/events/${photo}`), 'base64')
                     events.push({
-                        _id, name, date, description, location, fileBuffer
+                        _id, name, date, description, location, fileBuffer,date_time
                     })
                 })
             } catch(err) {
