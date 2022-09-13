@@ -55,6 +55,36 @@ router.post('/:id', async (req, res) => {
     }
 })
 
+router.post('/going/:id', uploadEvent.none(), async (req, res) => {
+    const id = req.params.id
+    try {
+        const event = await Event.findOne({ _id: id })
+        const user_id = req.body._id
+
+        event.going.push(user_id)
+        await event.save()
+        res.status(200).send({ message: "Going Done" })
+    } catch (err) {
+        console.log(err)
+        res.status(500).send(err)
+    }
+})
+
+router.post('/interested/:id', uploadEvent.none(), async (req, res) => {
+    const id = req.params.id
+    try {
+        const event = await Event.findOne({ _id: id })
+        const user_id = req.body._id
+
+        event.interested.push(user_id)
+        await event.save()
+        res.status(200).send({ message: "Going Done" })
+    } catch (err) {
+        res.status(500).send(err)
+    }
+})
+
+
 // fetch individual image
 router.post('/image/:id', async (req, res) => {
     const id = req.params.id
