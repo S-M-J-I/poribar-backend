@@ -15,6 +15,12 @@ const eventSchema = mongoose.Schema({
         type: String,
         trim: true
     },
+    going: [{
+        type: String
+    }],
+    interested: [{
+        type: String,
+    }],
     description: {
         type: String,
         trim: true,
