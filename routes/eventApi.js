@@ -61,9 +61,17 @@ router.post('/going/:id', uploadEvent.none(), async (req, res) => {
         const event = await Event.findOne({ _id: id })
         const user_id = req.body._id
 
-        event.going.push(user_id)
-        await event.save()
-        res.status(200).send({ message: "Going Done" })
+        if (!event.going.includes(user_id)) {
+            event.going.push(user_id)
+            if (event.interested.includes(user_id)) {
+                event.interested = event.interested.filter(user => {
+                    return user !== user_id
+                })
+            }
+            await event.save()
+        }
+
+        res.status(200).send(event)
     } catch (err) {
         console.log(err)
         res.status(500).send(err)
@@ -76,46 +84,21 @@ router.post('/interested/:id', uploadEvent.none(), async (req, res) => {
         const event = await Event.findOne({ _id: id })
         const user_id = req.body._id
 
-        event.interested.push(user_id)
-        await event.save()
-        res.status(200).send({ message: "Going Done" })
-    } catch (err) {
-        res.status(500).send(err)
-    }
-})
-
-
-// fetch individual image
-router.post('/image/:id', async (req, res) => {
-    const id = req.params.id
-    try {
-
-        const reqFor = req.body.reqFor
-        const event = await Event.findOne({ _id: id })
-        const filename = `${event.photo}`
-
-        // console.log(reqFor)
-        console.log(image_dirs)
-        console.log('dir: ', __dirname)
-
-        const filepath = `${image_dirs.get(reqFor)}/${filename}`
-        fp = path.join(__dirname, '../', filepath)
-
-        console.log(fp)
-        res.sendFile(fp, function (err) {
-            res.status(500).send(err)
-        })
-
+        if (!event.interested.includes(user_id)) {
+            event.interested.push(user_id)
+            await event.save()
+        }
+        res.status(200).send(event)
     } catch (err) {
         res.status(500).send(err)
     }
 })
 
 // delete event
-router.post('/delete', async (req, res) => {
+router.post('/delete/:id', async (req, res) => {
     try {
         // pass event _id in body to delete
-        await Event.deleteOne({ _id: req.body._id })
+        await Event.deleteOne({ _id: req.params.id })
         res.status(200).send({ message: "Event Deleted" })
     } catch (err) {
         res.status(500).send(err)

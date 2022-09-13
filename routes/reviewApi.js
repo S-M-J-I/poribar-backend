@@ -18,15 +18,45 @@ router.post('/post', async (req, res) => {
     }
 })
 
-router.post('/get/:id', async (req, res) => {
+router.post('/get-reviews-nurse/:id', async (req, res) => {
     const id = req.params.id
     try {
         const reviews = await Review.find({ reviewed_to: id })
-        // get reviewer and save to reviewer
-        res.status(200).send(reviews)
+
+        let revs = []
+        reviews.forEach(async (review) => {
+            const user = await User.findOne({ _id: review.reviewer })
+            revs.push({
+                user: user.name,
+                ...review
+            })
+        })
+
+        res.status(200).send(revs)
     } catch (err) {
         res.status(500).send(err)
     }
 })
+
+router.post('/get-reviews-user/:id', async (req, res) => {
+    const id = req.params.id
+    try {
+        const reviews = await Review.find({ reviewer: id })
+
+        let revs = []
+        reviews.forEach(async (review) => {
+            const user = await Nurse.findOne({ _id: review.reviewed_to })
+            revs.push({
+                nurse: user.name,
+                ...review
+            })
+        })
+        res.status(200).send(revs)
+    } catch (err) {
+        res.status(500).send(err)
+    }
+})
+
+
 
 module.exports = router
