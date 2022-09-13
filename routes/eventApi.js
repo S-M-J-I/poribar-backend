@@ -48,6 +48,7 @@ router.post('/:id', async (req, res) => {
     const id = req.params.id
     try {
         const event = await Event.findOne({ _id: id })
+        event.photo = fs.readFileSync(path.join(__dirname, '../', `images/events/${event.photo}`), 'base64')
         res.send(event)
     } catch (err) {
         res.status(500).send(err)
