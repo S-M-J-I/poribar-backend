@@ -1,6 +1,7 @@
 const express = require('express')
 const multer = require('multer')
 const Report = require('../models/Reports')
+const User = require('../models/User')
 const Nurse = require('../models/Nurse')
 const router = express.Router()
 const uploadReport = multer({ dest: 'images/reports' })
@@ -39,17 +40,18 @@ router.post('/all/:id', async (req, res) => {
     }
 })
 
-router.post('/report/:id/:reportid', async (req, res) => {
+router.post('/report/:id', async (req, res) => {
     try {
-        const user_id = req.params.id
-        const report_id = req.params.reportid
-        const report = await Report.findOne({ patient: user_id, _id: report_id })
+        const report_id = req.params.id
+        const report = await Report.findOne({ _id: report_id })
         const images = []
         report.images.forEach((img) => {
             images.push(fs.readFileSync(path.join(__dirname, '../', `images/reports/${img}`), 'base64'))
         })
+        const patient = await User.findOne({ _id: report.patient })
+        const nurse = await Nurse.findOne({ _id: report.nurse })
 
-        res.status(200).send({ report: report, images })
+        res.status(200).send({ report: report, images, patient, nurse })
     } catch (err) {
         console.log(err)
         res.status(500).send({ message: "Internal Server Error" })

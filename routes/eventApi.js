@@ -30,7 +30,12 @@ router.post('/all', async (req, res) => {
             docs.forEach(event => {
                 const { _id, name, date, description, location, photo } = event
 
-                let fileBuffer = fs.readFileSync(path.join(__dirname, '../', `images/events/${photo}`), 'base64')
+                let fileBuffer = ''
+                try {
+                    fileBuffer = fs.readFileSync(path.join(__dirname, '../', `images/events/${photo}`), 'base64')
+                } catch (err) {
+
+                }
                 events.push({
                     _id, name, date, description, location, fileBuffer
                 })

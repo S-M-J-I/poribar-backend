@@ -21,9 +21,9 @@ router.post('/signup', uploadAvatar.single('avatar'), async (req, res) => {
 })
 
 
-router.post('/profile', /* auth, */ async (req, res) => {
+router.post('/profile/:uid', /* auth, */ async (req, res) => {
     try {
-        const user = await userMiddleware.getUser(req.body.uid, "user")
+        const user = await userMiddleware.getUser(req.params.uid, "user")
         res.status(200).send(user)
     } catch (err) {
         res.status(500).send("Something went wrong")

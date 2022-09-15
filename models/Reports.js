@@ -6,6 +6,10 @@ const reportSchema = mongoose.Schema({
         required: true,
         trim: true
     },
+    description: {
+        type: String,
+        trim: true
+    },
     content: {
         type: String,
         required: true,
