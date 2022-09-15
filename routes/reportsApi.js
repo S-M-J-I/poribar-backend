@@ -4,6 +4,8 @@ const Report = require('../models/Reports')
 const Nurse = require('../models/Nurse')
 const router = express.Router()
 const uploadReport = multer({ dest: 'images/reports' })
+const fs = require('fs')
+const path = require('path')
 
 router.post('/add', uploadReport.array('reportImages', 10), async (req, res) => {
     try {
@@ -47,8 +49,9 @@ router.post('/report/:id/:reportid', async (req, res) => {
             images.push(fs.readFileSync(path.join(__dirname, '../', `images/reports/${img}`), 'base64'))
         })
 
-        res.status(200).send({ report, images })
+        res.status(200).send({ report: report, images })
     } catch (err) {
+        console.log(err)
         res.status(500).send({ message: "Internal Server Error" })
     }
 })
