@@ -16,9 +16,9 @@ const appointmentSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
-    details: {
-        type: String,
-        trim: true,
+    amount: {
+        type: Number,
+        default: 1000,
         required: true
     },
     location: {
