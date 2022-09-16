@@ -17,7 +17,31 @@ const forumPostRoutes = require('./routes/forumPostApi')
 app.use(cors({ origin: '*' }))
 // app.use(bodyParser.urlencoded())
 // app.use(express.urlencoded({ extended: true }))
-
+app.post("/findAllNurses",(req,res)=>{
+    res.json([{
+    "name":"Rajina Khatun",
+    "rating":"67",
+    "hospitalname":"Square Hospital Lt.",
+    },
+    {
+        "name":"Rajina Khatun",
+        "rating":"45",
+        "hospitalname":"Square Hospital Lt.",
+    },
+    {
+        "name":"Rijia Khatun",
+        "rating":"87",
+        "hospitalname":"Lab Aid Hospital",       
+    },
+    {
+        "name":"Rajina Khatun",
+        "rating":"96",
+        "hospitalname":"Square Hospital Lt.",         
+    },
+   
+    
+])
+})
 app.use('/api/auth/user/', userAuthRoutes)
 app.use('/api/auth/nurse/', nurseAuthRoutes)
 app.use('/api/events/', eventRoutes)
