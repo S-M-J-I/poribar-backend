@@ -25,12 +25,24 @@ router.post('/signup', uploadAvatar.single('avatar'), async (req, res) => {
     }
 })
 
-router.post('/profile', /* auth, */ async (req, res) => {
+router.post('/profile/:uid', /* auth, */ async (req, res) => {
     try {
-        const nurse = await userMiddleware.getUser(req.body.uid, "nurse")
+        const nurse = await userMiddleware.getUser(req.params.uid, "nurse")
         res.status(200).send(nurse)
     } catch (err) {
         res.status(500).send("Something went wrong")
+    }
+})
+
+router.post('/getall', async (req, res) => {
+    try {
+        const nurses = await Nurse.find({})
+        nurses.map(nurse => {
+            nurse.avatar = fs.readFileSync(path.join(__dirname, '../', `images/avatar/${nurse.avatar}`), 'base64')
+        })
+        res.send(nurses)
+    } catch (err) {
+        res.status(500).send(err)
     }
 })
 

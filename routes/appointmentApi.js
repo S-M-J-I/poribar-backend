@@ -2,8 +2,11 @@ const express = require('express')
 const router = express.Router()
 const auth = require('../middleware/auth')
 const Appointment = require('../models/Appointments')
+const Nurse = require('../models/Nurse')
+const multer = require('multer')
+const uploadAppointment = multer({ dest: 'images/appointments' })
 
-router.post('/create', /* auth, */ async (req, res) => {
+router.post('/create', /* auth, */uploadAppointment.none(), async (req, res) => {
 
     const appointment = new Appointment(req.body)
 
@@ -16,10 +19,41 @@ router.post('/create', /* auth, */ async (req, res) => {
     }
 })
 
-router.post('/getall', async (req, res) => {
+// user side
+router.post('/user/getall/:uid', async (req, res) => {
     try {
-        const appointments = await Appointment.find({})
-        res.status(200).send(appointments)
+
+        const appointments = await Appointment.find({ customer: req.params.uid })
+        const res = []
+
+        appointments.forEach(async appointment => {
+            const nurse = await Nurse.findOne({ uid: appointment.nurse })
+            if (nurse) {
+                appointment.nurse = nurse.name
+                res.push(appointment)
+            }
+        })
+        res.status(200).send(res)
+    } catch (err) {
+        res.status(500).send(err)
+    }
+})
+
+
+router.post('/nurse/getall/:uid', async (req, res) => {
+    try {
+
+        const appointments = await Appointment.find({ nurse: req.params.uid })
+        const res = []
+
+        appointments.forEach(async appointment => {
+            const user = await User.findOne({ uid: appointment.customer })
+            if (user) {
+                appointment.customer = user.name
+                res.push(appointment)
+            }
+        })
+        res.status(200).send(res)
     } catch (err) {
         res.status(500).send(err)
     }
