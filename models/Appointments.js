@@ -1,6 +1,13 @@
 const mongoose = require('mongoose')
 
 const appointmentSchema = new mongoose.Schema({
+    duration: {
+        type: Number,
+        required: true
+    },
+    start_date: {
+        type: String
+    },
     customer: {
         type: String,
         trim: true

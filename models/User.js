@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
+    type: {
+        type: String,
+        default: 'user'
+    },
     password: {
         type: String,
         required: true,
@@ -38,6 +42,14 @@ const userSchema = new mongoose.Schema({
                 throw new Error("Password cannot be 'password'")
             }
         }
+    },
+    gender: {
+        type: String,
+        trim: true
+    },
+    blood_group: {
+        type: String,
+        trim: true
     },
     phone: {
         type: String,

@@ -1,8 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const Post = require('../models/Post')
+const multer = require('multer')
+const uploadPost = multer({ dest: 'images/posts' })
 
-router.post('/create', async (req, res) => {
+router.post('/create', uploadPost.none(), async (req, res) => {
     try {
         const post = new Post(req.body)
         await post.save()
@@ -12,7 +14,7 @@ router.post('/create', async (req, res) => {
     }
 })
 
-router.post('/edit/:id', async (req, res) => {
+router.post('/edit/:id', uploadPost.none(), async (req, res) => {
     try {
         const id = req.params.id
         const post = await Post.findOne({ _id: id })

@@ -21,9 +21,9 @@ router.post('/signup', uploadAvatar.single('avatar'), async (req, res) => {
 })
 
 
-router.post('/profile', /* auth, */ async (req, res) => {
+router.post('/profile/:uid', /* auth, */ async (req, res) => {
     try {
-        const user = await userMiddleware.getUser(req.body.uid, "user")
+        const user = await userMiddleware.getUser(req.params.uid, "user")
         res.status(200).send(user)
     } catch (err) {
         res.status(500).send("Something went wrong")
@@ -54,7 +54,7 @@ router.post('/images', async (req, res) => {
     }
 })
 
-router.post('/profile/update', auth, uploadAvatar.single('avatar'), async (req, res) => {
+router.post('/profile/update', uploadAvatar.single('avatar'), async (req, res) => {
     try {
         // username, email, pass, ph no, photo
         // fields prefilled
