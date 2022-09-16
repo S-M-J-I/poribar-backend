@@ -13,8 +13,9 @@ const path = require('path')
 router.post('/signup', uploadAvatar.single('avatar'), async (req, res) => {
 
     try {
+        console.log(req.body)
         await userMiddleware.saveUser(req.body, req.file, "user")
-        res.status(200).send("Registered User")
+        res.status(200).send({msg:"Registered User"})
     } catch (err) {
         res.send(err)
     }
