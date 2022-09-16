@@ -26,6 +26,7 @@ router.post('/profile/:uid', /* auth, */ async (req, res) => {
         const user = await userMiddleware.getUser(req.params.uid, "user")
         res.status(200).send(user)
     } catch (err) {
+        console.log("here")
         res.status(500).send("Something went wrong")
     }
 })
