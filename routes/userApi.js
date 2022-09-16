@@ -54,7 +54,7 @@ router.post('/images', async (req, res) => {
     }
 })
 
-router.post('/profile/update', auth, uploadAvatar.single('avatar'), async (req, res) => {
+router.post('/profile/update', uploadAvatar.single('avatar'), async (req, res) => {
     try {
         // username, email, pass, ph no, photo
         // fields prefilled

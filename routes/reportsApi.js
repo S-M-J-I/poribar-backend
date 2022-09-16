@@ -8,13 +8,15 @@ const uploadReport = multer({ dest: 'images/reports' })
 const fs = require('fs')
 const path = require('path')
 
-router.post('/add', uploadReport.array('reportImages', 10), async (req, res) => {
+router.post('/add/:id', uploadReport.array('reportImages', 10), async (req, res) => {
     try {
         console.log(req.body)
         const files = []
         req.files.forEach(file => files.push(file.filename))
+        const patient = req.params.id
         const report = new Report({
             ...req.body,
+            patient,
             images: files,
         })
         await report.save()
