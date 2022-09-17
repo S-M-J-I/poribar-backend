@@ -22,15 +22,7 @@ router.post('/signup', uploadAvatar.single('avatar'), async (req, res) => {
 })
 
 
-router.post('/profile/:uid', /* auth, */ async (req, res) => {
-    try {
-        const user = await userMiddleware.getUser(req.params.uid, "user")
-        res.status(200).send(user)
-    } catch (err) {
-        console.log("here")
-        res.status(500).send("Something went wrong")
-    }
-})
+
 
 router.post('/images', async (req, res) => {
     try {
@@ -56,29 +48,48 @@ router.post('/images', async (req, res) => {
     }
 })
 
-router.post('/profile/update', uploadAvatar.single('avatar'), async (req, res) => {
+router.post('/profile/update', uploadAvatar.none() , async (req, res) => {
     try {
         // username, email, pass, ph no, photo
         // fields prefilled
-        const { username, email, password, address, phone } = req.body
+        // console.log(req.body)
+        const {name,email,phone,type } = req.body
+        await User.updateOne({ uid: req.body.uid }, { name,email,phone, type})
+        console.log('ok')
+        res.status(201).send({status:"success"})
 
-        let avatar = ''
-        if (req.file.filename) {
-            avatar = req.file.filename
-        }
-
-        await User.updateOne({ uid: req.body.uid }, { username, email, password, address, phone, avatar }, (err, docs) => {
-            if (err) {
-                throw err
-            } else {
-                console.log(docs)
-            }
-        })
-
-        res.status(201).send("Updated")
+        
     } catch (err) {
         res.status(500).send(err)
     }
 })
+router.post('/profile/remove',uploadAvatar.none(), async (req,res)=>{
+    try{
+        const {uid} = req.body
+        await User.deleteOne({uid: uid})
+        res.status(201).send({status:'success'})
+    }catch(err){
+        console.log(err)
+        res.status(500).send(err)
+    }
+})
+router.post('/profile/:uid', /* auth, */ async (req, res) => {
+    try {
+        const user = await userMiddleware.getUser(req.params.uid, "user")
+        res.status(200).send(user)
+    } catch (err) {
+        // console.log("here")
+        res.status(500).send("Something went wrong")
+    }
+})
 
+router.post('/getall',uploadAvatar.none(),async (req,res)=>{
+        try{
+            const users = await userMiddleware.getAllUsers('user')
+            res.status(200).send(users)
+        }catch(err){
+            console.log(err)
+            res.status(500).send("Something went wrong")
+        }
+});
 module.exports = router

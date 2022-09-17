@@ -10,7 +10,7 @@ const saveUser = async (body, avatar_file, type) => {
     admin.auth().createUser(body)
         .then(async user => {
 
-            const { name, username, email, password } = data
+            const { name, username, email, password, phone,date } = data
             console.log(name, username, email, password)
 
             if (type === "user") {
@@ -20,6 +20,8 @@ const saveUser = async (body, avatar_file, type) => {
                     username,
                     email,
                     password,
+                    phone,
+                    date,
                     avatar: avatar_file.filename,
                     ext: avatar_file.originalname.split('.')[1]
                 })
@@ -58,8 +60,27 @@ const getUser = async (uid, type) => {
         return user
     }
 }
+const getAllUsers = async (type) => {
+    if (type === "user") {
+        const users = await User.find({})
+        console.log(users)
+        await Promise.all(users.map(user => {
+            let imageFileBuffer = fs.readFileSync(path.join(__dirname, '../', `images/avatar/${user.avatar}`), 'base64')
+            user.avatar = imageFileBuffer
+        }))
+        return users
+    } else if (type === "nurse") {
+        const users = await Nurse.find({})
+        await Promise.all(users.forEach(user => {
+            let imageFileBuffer = fs.readFileSync(path.join(__dirname, '../', `images/avatar/${user.avatar}`), 'base64')
+            user.avatar = imageFileBuffer
+        }))
+        return users
+    }
+}
 
 module.exports = {
     saveUser,
-    getUser
+    getUser,
+    getAllUsers
 }
