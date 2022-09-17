@@ -50,7 +50,8 @@ router.post('/report/:id', async (req, res) => {
         report.images.forEach((img) => {
             images.push(fs.readFileSync(path.join(__dirname, '../', `images/reports/${img}`), 'base64'))
         })
-        const patient = await User.findOne({ _id: report.patient })
+        console.log(report)
+        const patient = await User.findOne({ uid: report.patient })
         const nurse = await Nurse.findOne({ _id: report.nurse })
 
         res.status(200).send({ report: report, images, patient, nurse })

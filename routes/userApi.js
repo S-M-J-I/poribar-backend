@@ -15,7 +15,7 @@ router.post('/signup', uploadAvatar.single('avatar'), async (req, res) => {
     try {
         console.log(req.body)
         await userMiddleware.saveUser(req.body, req.file, "user")
-        res.status(200).send({msg:"Registered User"})
+        res.status(200).send({status:"success"})
     } catch (err) {
         res.send(err)
     }
@@ -43,7 +43,6 @@ router.post('/images', async (req, res) => {
         })
 
     } catch (err) {
-        console.log("HELLO BITCHES")
         res.status(500).send("Server more gese")
     }
 })
@@ -67,6 +66,7 @@ router.post('/profile/remove',uploadAvatar.none(), async (req,res)=>{
     try{
         const {uid} = req.body
         await User.deleteOne({uid: uid})
+        await admin.auth().deleteUser(uid)
         res.status(201).send({status:'success'})
     }catch(err){
         console.log(err)

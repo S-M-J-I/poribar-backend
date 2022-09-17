@@ -16,7 +16,7 @@ router.post('/signup', uploadAvatar.single('avatar'), async (req, res) => {
     try {
         try {
             await userMiddleware.saveUser(req.body, req.file, "nurse")
-            res.status(200).send("Registered Nurse")
+            res.status(200).send({status:'success'})
         } catch (err) {
             res.send(err)
         }
@@ -66,7 +66,6 @@ router.post('/images', async (req, res) => {
         })
 
     } catch (err) {
-        console.log("HELLO BITCHES")
         res.status(500).send("Server more gese")
     }
 })

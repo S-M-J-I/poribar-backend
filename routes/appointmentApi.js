@@ -14,7 +14,7 @@ router.post('/create', /* auth, */uploadAppointment.none(), async (req, res) => 
     try {
         await appointment.save()
 
-        res.status(200).send({ message: "Appointment created" })
+        res.status(200).send({ status: "success" })
     } catch (err) {
         res.status(500).send(err)
     }
@@ -29,7 +29,7 @@ async function getAppointments(id){
     const appointments = await Appointment.find({ customer: id })
     const res=[]
     await Promise.all(appointments.map( async appointment => {
-        appointment.nurse = (await getNurse(appointment.nurse)).name
+        appointment.nurse = (await getNurse(appointment.nurse)).uid
     }))
     return appointments;
 }
@@ -48,16 +48,16 @@ router.post('/nurse/getall/:uid', async (req, res) => {
     try {
 
         const appointments = await Appointment.find({ nurse: req.params.uid })
-        const res = []
+        // console.log(appointments)
 
-        await Promise.all(appointments.forEach(async appointment => {
+        await Promise.all(appointments.map(async appointment => {
             const user = await User.findOne({ uid: appointment.customer })
             if (user) {
-                appointment.customer = user.name
-                res.push(appointment)
+                appointment.customer = user.uid
             }
         }))
-        res.status(200).send(res)
+        console.log('here',appointments)
+        res.status(200).send(appointments)
     } catch (err) {
         res.status(500).send(err)
     }
