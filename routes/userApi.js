@@ -2,6 +2,7 @@ const express = require('express')
 const admin = require('../firebase/firebaseAuth')
 const router = express.Router()
 const User = require('../models/User')
+const Nurse = require('../models/Nurse')
 const auth = require('../middleware/auth')
 const multer = require('multer')
 const uploadAvatar = multer({ dest: 'images/avatar' })
@@ -47,18 +48,47 @@ router.post('/images', async (req, res) => {
     }
 })
 
-router.post('/profile/update', uploadAvatar.none(), async (req, res) => {
+router.post('/profile/update/:uid', uploadAvatar.single('avatar'), async (req, res) => {
     try {
         // username, email, pass, ph no, photo
         // fields prefilled
         // console.log(req.body)
-        const { name, email, phone, type } = req.body
-        await User.updateOne({ uid: req.body.uid }, { name, email, phone, type })
+
+        let avatar = null
+        if (req.file) {
+            avatar = req.file.filename
+        }
+
+        let { name, username, email, phone, gender, blood_group, password } = req.body
+
+
+        password = await userMiddleware.hashPass(password)
+        console.log(password)
+
+        const user = await User.findOne({ uid: req.params.uid })
+        const oldAvatar = user.avatar
+
+        if (avatar) {
+            await User.updateOne({ uid: req.params.uid }, { name, username, email, phone, gender, blood_group, password, avatar })
+            fs.unlinkSync(path.join(__dirname, '../', `images/avatar/${oldAvatar}`))
+        } else {
+            await User.updateOne({ uid: req.params.uid }, { name, username, email, phone, gender, blood_group, password })
+        }
+
+        if (user.type === 'nurse') {
+            if (avatar) {
+                await Nurse.updateOne({ uid: req.params.uid }, { name, username, email, phone, gender, blood_group, password, avatar })
+            } else {
+                await Nurse.updateOne({ uid: req.params.uid }, { name, username, email, phone, gender, blood_group, password })
+            }
+        }
+
         console.log('ok')
         res.status(201).send({ status: "success" })
 
 
     } catch (err) {
+        console.log(err)
         res.status(500).send(err)
     }
 })
