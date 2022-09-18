@@ -88,10 +88,10 @@ const nurseSchema = new mongoose.Schema({
                 type: String,
                 trim: true
             },
-            start_year: {
+            start_date: {
                 type: Date
             },
-            end_year: {
+            end_date: {
                 type: Date
             }
         }
