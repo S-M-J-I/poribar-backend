@@ -75,10 +75,13 @@ router.post('/profile/update/:uid', uploadAvatar.single('avatar'), async (req, r
         } else {
             await User.updateOne({ uid: req.params.uid }, { name, username, email, phone, gender, blood_group, password })
         }
-        admin.auth().updateUser(req.params.uid, {
-            email: email,
-            password: stringPassword
-        })
+
+        if (user.email !== email && user.password !== password) {
+            admin.auth().updateUser(req.params.uid, {
+                email: email,
+                password: stringPassword
+            })
+        }
 
         if (user.type === 'nurse') {
             if (avatar) {
@@ -97,11 +100,12 @@ router.post('/profile/update/:uid', uploadAvatar.single('avatar'), async (req, r
         res.status(500).send(err)
     }
 })
-router.post('/profile/remove', uploadAvatar.none(), async (req, res) => {
+router.post('/profile/remove/:uid', uploadAvatar.none(), async (req, res) => {
     try {
-        const { uid } = req.body
-        await User.deleteOne({ uid: uid })
+        const user_uid = req.params.uid
+        await User.deleteOne({ uid: user_uid })
         await admin.auth().deleteUser(uid)
+
         res.status(201).send({ status: 'success' })
     } catch (err) {
         console.log(err)
