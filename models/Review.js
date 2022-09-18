@@ -18,6 +18,10 @@ const reviewSchema = mongoose.Schema({
     reviewed_to: {
         type: String,
         trim: true
+    },
+    date:{
+        type: Date,
+        default: Date.now
     }
 })
 
