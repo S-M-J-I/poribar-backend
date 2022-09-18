@@ -38,6 +38,14 @@ const nurseSchema = new mongoose.Schema({
             }
         }
     },
+    gender: {
+        type: String,
+        trim: true
+    },
+    blood_group: {
+        type: String,
+        trim: true
+    },
     type: {
         type: String,
         default: 'nurse'

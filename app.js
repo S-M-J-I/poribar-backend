@@ -14,7 +14,6 @@ const appointmentRoutes = require('./routes/appointmentApi')
 const forumPostRoutes = require('./routes/forumPostApi')
 const reviewRoutes = require('./routes/reviewApi')
 const reportApi = require('./routes/reportsApi')
-const activityApi = require('./routes/activityApi')
 
 // app.use(express.json())
 app.use(cors({ origin: '*' }))
@@ -53,7 +52,6 @@ app.use('/api/payments/', paymentRoutes)
 app.use('/api/forums/post/', forumPostRoutes)
 app.use('/api/review/', reviewRoutes)
 app.use('/api/reports/', reportApi)
-app.use('/api/activity/', activityApi)
 
 app.use('*', (req, res) => {
     res.status(404).send({ messsage: 'Not Found' })

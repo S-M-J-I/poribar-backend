@@ -29,18 +29,19 @@ router.post('/all', async (req, res) => {
         Event.find({}).sort('-date').exec((err, docs) => {
             try {
                 docs.forEach(event => {
-                    const { _id, name, date, description, location, photo } = event
-    
+                    const { _id, name, date_time, description, location, photo } = event
+                    console.log(date_time)
                     let fileBuffer = ''
                     try {
                         fileBuffer = fs.readFileSync(path.join(__dirname, '../', `images/events/${photo}`), 'base64')
                     } catch (err) {
-    
+                        fileBuffer = fs.readFileSync(path.join(__dirname, '../', `images/events/default-events.jpg`), 'base64')
                     }
                     events.push({
-                        _id, name, date, description, location, fileBuffer
+                        _id, name, date_time, description, location, fileBuffer
                     })
                 })
+                // console.log(events)
                 res.status(200).send(events)
             } catch (err) {
                 res.status(500).send(err)
@@ -57,8 +58,12 @@ router.post('/:id', async (req, res) => {
     const id = req.params.id
     try {
         const event = await Event.findOne({ _id: id })
-        event.photo = fs.readFileSync(path.join(__dirname, '../', `images/events/${event.photo}`), 'base64')
-        res.send(event)
+        try{
+            event.photo = fs.readFileSync(path.join(__dirname, '../', `images/events/${event.photo}`), 'base64')
+        }catch(err){
+            event.photo = fs.readFileSync(path.join(__dirname, '../', `images/events/default-events.jpg`), 'base64')
+        }
+        res.status(200).send(event)
     } catch (err) {
         res.status(500).send(err)
     }
@@ -68,8 +73,9 @@ router.post('/going/:id', uploadEvent.none(), async (req, res) => {
     const id = req.params.id
     try {
         const event = await Event.findOne({ _id: id })
-        const user_id = req.body._id
-
+        const {uid} = req.body
+        const user_id = uid
+        console.log(uid)
         if (!event.going.includes(user_id)) {
             event.going.push(user_id)
             if (event.interested.includes(user_id)) {
@@ -78,8 +84,17 @@ router.post('/going/:id', uploadEvent.none(), async (req, res) => {
                 })
             }
             await event.save()
+        }else{
+            event.going = event.going.filter(user => {
+                return user !== user_id
+            })
+            await event.save()
         }
-
+        try{
+            event.photo = fs.readFileSync(path.join(__dirname, '../', `images/events/${event.photo}`), 'base64')
+        }catch(err){
+            event.photo = fs.readFileSync(path.join(__dirname, '../', `images/events/default-events.jpg`), 'base64')
+        }
         res.status(200).send(event)
     } catch (err) {
         console.log(err)
@@ -91,11 +106,26 @@ router.post('/interested/:id', uploadEvent.none(), async (req, res) => {
     const id = req.params.id
     try {
         const event = await Event.findOne({ _id: id })
-        const user_id = req.body._id
+        const user_id = req.body.uid
 
         if (!event.interested.includes(user_id)) {
+            if (event.going.includes(user_id)) {
+                event.going = event.going.filter(user => {
+                    return user !== user_id
+                })
+            }
             event.interested.push(user_id)
             await event.save()
+        }else{
+            event.interested = event.interested.filter(user => {
+                return user !== user_id
+            })
+            await event.save()
+        }
+        try{
+            event.photo = fs.readFileSync(path.join(__dirname, '../', `images/events/${event.photo}`), 'base64')
+        }catch(err){
+            event.photo = fs.readFileSync(path.join(__dirname, '../', `images/events/default-events.jpg`), 'base64')
         }
         res.status(200).send(event)
     } catch (err) {
