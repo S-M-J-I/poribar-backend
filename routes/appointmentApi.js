@@ -19,23 +19,23 @@ router.post('/create', /* auth, */uploadAppointment.none(), async (req, res) => 
         res.status(500).send(err)
     }
 })
-async function getNurse(id){
+async function getNurse(id) {
     console.log(id)
     const nurse = await Nurse.findOne({ uid: id })
     return nurse
 }
 
-async function getAppointments(id){
+async function getAppointments(id) {
     const appointments = await Appointment.find({ customer: id })
-    const res=[]
-    await Promise.all(appointments.map( async appointment => {
+    await Promise.all(appointments.map(async appointment => {
         appointment.nurse = (await getNurse(appointment.nurse)).name
     }))
     return appointments;
 }
 // user side
-router.post('/user/getall/:uid',  async (req, res) => {
+router.post('/user/getall/:uid', async (req, res) => {
     try {
+        console.log(req.params.uid)
         const appointments = await getAppointments(req.params.uid)
         res.status(200).send(appointments)
     } catch (err) {
@@ -67,6 +67,7 @@ router.post('/nurse/getall/:uid', async (req, res) => {
 router.post('/get/:id', async (req, res) => {
     try {
         const id = req.params.id
+        console.log(id)
         const appointment = await Appointment.findOne({ _id: id })
         res.status(200).send(appointment)
     } catch (err) {
