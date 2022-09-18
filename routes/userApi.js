@@ -10,6 +10,7 @@ const image_dirs = require('../middleware/image_filter')
 const userMiddleware = require('../middleware/userMiddlewares')
 const fs = require('fs')
 const path = require('path')
+const bcrypt = require('bcryptjs')
 
 router.post('/signup', uploadAvatar.single('avatar'), async (req, res) => {
 
@@ -76,7 +77,15 @@ router.post('/profile/update/:uid', uploadAvatar.single('avatar'), async (req, r
             await User.updateOne({ uid: req.params.uid }, { name, username, email, phone, gender, blood_group, password })
         }
 
-        if (user.email !== email || user.password !== password) {
+        if (user.email !== email || bcrypt.compare(password, user.password, (err, data) => {
+            if (err) {
+                return false
+            }
+
+            if (data) {
+                return true
+            }
+        })) {
             admin.auth().updateUser(req.params.uid, {
                 email: email,
                 password: stringPassword
