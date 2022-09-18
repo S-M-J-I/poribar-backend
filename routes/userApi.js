@@ -76,7 +76,7 @@ router.post('/profile/update/:uid', uploadAvatar.single('avatar'), async (req, r
             await User.updateOne({ uid: req.params.uid }, { name, username, email, phone, gender, blood_group, password })
         }
 
-        if (user.email !== email && user.password !== password) {
+        if (user.email !== email || user.password !== password) {
             admin.auth().updateUser(req.params.uid, {
                 email: email,
                 password: stringPassword

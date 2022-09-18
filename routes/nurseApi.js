@@ -61,7 +61,7 @@ router.post('/add/certificates/:uid', uploadCover.none(), async (req, res) => {
         nurse.certificates = certs
         await nurse.save()
 
-        res.status(200).send({ msg: "Success" })
+        res.status(200).send({ status: "success" })
     } catch (err) {
         console.log(err)
         res.status(500).send("Internal Server")
@@ -81,7 +81,7 @@ router.post('/add/educations/:uid', uploadCover.none(), async (req, res) => {
         nurse.educations = edus
         await nurse.save()
 
-        res.status(200).send({ msg: "Success" })
+        res.status(200).send({ status: "success" })
     } catch (err) {
         console.log(err)
         res.status(500).send("Internal Server")
@@ -101,7 +101,7 @@ router.post('/add/experiences/:uid', uploadCover.none(), async (req, res) => {
         nurse.experiences = exps
         await nurse.save()
 
-        res.status(200).send({ msg: "Success" })
+        res.status(200).send({ status: "success" })
     } catch (err) {
         console.log(err)
         res.status(500).send("Internal Server")
@@ -152,7 +152,7 @@ router.post('/profile/update', auth, uploadAvatar.single('avatar'), async (req, 
             }
         })
 
-        res.status(201).send("Updated")
+        res.status(201).send({status:"success"})
     } catch (err) {
         res.status(500).send(err)
     }
