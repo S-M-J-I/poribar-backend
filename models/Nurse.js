@@ -66,6 +66,76 @@ const nurseSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    cover_photo: {
+        type: String
+    },
+    about: {
+        type: String,
+        trim: true
+    },
+    educations: [{
+        education: {
+            institute_name: {
+                type: String,
+                trim: true
+            },
+            program: {
+                type: String,
+                trim: true
+            },
+            description: {
+                type: String,
+                trim: true
+            },
+            start_year: {
+                type: Date
+            },
+            end_year: {
+                type: Date
+            }
+        }
+    }],
+    certificates: [{
+        certificate: {
+            course_name: {
+                type: String,
+                trim: true
+            },
+            company_name: {
+                type: String,
+                trim: true
+            },
+            issue_year: {
+                type: Date
+            }
+        }
+    }],
+    experiences: [{
+        experience: {
+            designation: {
+                type: String,
+                trim: true
+            },
+            company_name: {
+                type: String,
+                trim: true
+            },
+            type: {
+                type: String,
+                trim: true
+            },
+            start_date: {
+                type: Date
+            },
+            end_date: {
+                type: Date
+            },
+            location: {
+                type: String,
+                trim: true
+            }
+        }
+    }],
     avatar: {
         type: String,
     },
