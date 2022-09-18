@@ -41,6 +41,9 @@ const appointmentSchema = new mongoose.Schema({
     comepleted: {
         type: Boolean,
         default: false
+    },status:{
+        type: String,
+        default: 'pending'
     }
 }, {
     timestamps: true

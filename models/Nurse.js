@@ -64,7 +64,8 @@ const nurseSchema = new mongoose.Schema({
     },
     rating: {
         type: Number,
-        default: 0
+        default: 0,
+        round: 1
     },
     avatar: {
         type: String,

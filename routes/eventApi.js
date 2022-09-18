@@ -29,7 +29,7 @@ router.post('/all', async (req, res) => {
         Event.find({}).sort('-date').exec((err, docs) => {
             try {
                 docs.forEach(event => {
-                    const { _id, name, date_time, description, location, photo } = event
+                    const { _id, name, date_time, description, location, photo,going } = event
                     console.log(date_time)
                     let fileBuffer = ''
                     try {
@@ -38,7 +38,7 @@ router.post('/all', async (req, res) => {
                         fileBuffer = fs.readFileSync(path.join(__dirname, '../', `images/events/default-events.jpg`), 'base64')
                     }
                     events.push({
-                        _id, name, date_time, description, location, fileBuffer
+                        _id, name, date_time, description, location, fileBuffer,going
                     })
                 })
                 // console.log(events)
