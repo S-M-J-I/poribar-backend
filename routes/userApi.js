@@ -62,6 +62,7 @@ router.post('/profile/update/:uid', uploadAvatar.single('avatar'), async (req, r
         let { name, username, email, phone, gender, blood_group, password } = req.body
 
 
+        stringPassword = password
         password = await userMiddleware.hashPass(password)
         console.log(password)
 
@@ -70,33 +71,20 @@ router.post('/profile/update/:uid', uploadAvatar.single('avatar'), async (req, r
 
         if (avatar) {
             await User.updateOne({ uid: req.params.uid }, { name, username, email, phone, gender, blood_group, password, avatar })
-            admin.auth().updateUser(req.params.uid, {
-                email: email,
-                password: password
-            })
             fs.unlinkSync(path.join(__dirname, '../', `images/avatar/${oldAvatar}`))
         } else {
             await User.updateOne({ uid: req.params.uid }, { name, username, email, phone, gender, blood_group, password })
-            admin.auth().updateUser(req.params.uid, {
-                email: email,
-                password: password
-            })
-           
         }
+        admin.auth().updateUser(req.params.uid, {
+            email: email,
+            password: stringPassword
+        })
 
         if (user.type === 'nurse') {
             if (avatar) {
                 await Nurse.updateOne({ uid: req.params.uid }, { name, username, email, phone, gender, blood_group, password, avatar })
-                admin.auth().updateUser(req.params.uid, {
-                    email: email,
-                    password: password
-                })
             } else {
                 await Nurse.updateOne({ uid: req.params.uid }, { name, username, email, phone, gender, blood_group, password })
-                admin.auth().updateUser(req.params.uid, {
-                    email: email,
-                    password: password
-                })
             }
         }
 
