@@ -5,6 +5,7 @@ const Nurse = require('../models/Nurse')
 const auth = require('../middleware/auth')
 const multer = require('multer')
 const uploadAvatar = multer({ dest: 'images/avatar' })
+const uploadCover = multer({ dest: 'images/cover' })
 const image_dirs = require('../middleware/image_filter')
 const userMiddleware = require('../middleware/userMiddlewares')
 
@@ -16,7 +17,7 @@ router.post('/signup', uploadAvatar.single('avatar'), async (req, res) => {
     try {
         try {
             await userMiddleware.saveUser(req.body, req.file, "nurse")
-            res.status(200).send({status:'success'})
+            res.status(200).send({ status: 'success' })
         } catch (err) {
             res.send(err)
         }
@@ -45,6 +46,68 @@ router.post('/getall', async (req, res) => {
         res.status(500).send(err)
     }
 })
+
+
+router.post('/add/certificates/:uid', uploadCover.none(), async (req, res) => {
+    try {
+        const nurse_uid = req.params.uid
+        const nurse = await Nurse.findOne({ uid: nurse_uid })
+        const certificate = req.body
+
+        let certs = nurse.certificates
+        certs = certs.concat({ certificate })
+
+
+        nurse.certificates = certs
+        await nurse.save()
+
+        res.status(200).send({ msg: "Success" })
+    } catch (err) {
+        console.log(err)
+        res.status(500).send("Internal Server")
+    }
+})
+
+router.post('/add/educations/:uid', uploadCover.none(), async (req, res) => {
+    try {
+        const nurse_uid = req.params.uid
+        const nurse = await Nurse.findOne({ uid: nurse_uid })
+        const education = req.body
+
+        let edus = nurse.educations
+        edus = edus.concat({ education })
+
+
+        nurse.educations = edus
+        await nurse.save()
+
+        res.status(200).send({ msg: "Success" })
+    } catch (err) {
+        console.log(err)
+        res.status(500).send("Internal Server")
+    }
+})
+
+router.post('/add/experiences/:uid', uploadCover.none(), async (req, res) => {
+    try {
+        const nurse_uid = req.params.uid
+        const nurse = await Nurse.findOne({ uid: nurse_uid })
+        const experience = req.body
+
+        let exps = nurse.experiences
+        exps = exps.concat({ experience })
+
+
+        nurse.experiences = exps
+        await nurse.save()
+
+        res.status(200).send({ msg: "Success" })
+    } catch (err) {
+        console.log(err)
+        res.status(500).send("Internal Server")
+    }
+})
+
 
 router.post('/images', async (req, res) => {
     try {

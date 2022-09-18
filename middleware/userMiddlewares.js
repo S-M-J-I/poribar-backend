@@ -1,18 +1,19 @@
 const User = require('../models/User')
 const Nurse = require('../models/Nurse')
 const admin = require('../firebase/firebaseAuth')
+const bcrypt = require('bcryptjs')
 const fs = require('fs')
 const path = require('path')
 
 const saveUser = async (body, avatar_file, type) => {
     const data = Object.assign({}, body)
-    let curr=null
+    let curr = null
     admin.auth().createUser(body)
         .then(async user => {
-            curr=user
-            const { name, username, email, password, phone,blood_group,gender,address } = data
+            curr = user
+            const { name, username, email, password, phone, blood_group, gender, address } = data
             console.log(name, username, email, password)
-            date=new Date()
+            date = new Date()
             if (type === "user") {
                 const savedUser = new User({
                     uid: user.uid,
@@ -91,10 +92,10 @@ const getAllUsers = async (type) => {
         const users = await User.find({})
         console.log(users)
         await Promise.all(users.map(user => {
-            try{
+            try {
                 let imageFileBuffer = fs.readFileSync(path.join(__dirname, '../', `images/avatar/${user.avatar}`), 'base64')
                 user.avatar = imageFileBuffer
-            }catch(err){
+            } catch (err) {
                 user.avatar = fs.readFileSync(path.join(__dirname, '../', `images/avatar/default.jpg`), 'base64')
             }
         }))
@@ -109,8 +110,16 @@ const getAllUsers = async (type) => {
     }
 }
 
+const hashPass = async (password) => {
+    password = await bcrypt.hash(password, 8)
+
+    return password
+}
+
+
 module.exports = {
     saveUser,
     getUser,
-    getAllUsers
+    getAllUsers,
+    hashPass
 }
