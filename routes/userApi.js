@@ -81,6 +81,7 @@ router.post('/profile/update/:uid', uploadAvatar.single('avatar'), async (req, r
                 email: email,
                 password: password
             })
+           
         }
 
         if (user.type === 'nurse') {
