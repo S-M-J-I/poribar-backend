@@ -127,6 +127,7 @@ router.post('/profile/:uid', /* auth, */ async (req, res) => {
         res.status(200).send(user)
     } catch (err) {
         // console.log("here")
+        console.log(err)
         res.status(500).send("Something went wrong")
     }
 })

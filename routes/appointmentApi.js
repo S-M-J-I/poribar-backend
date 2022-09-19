@@ -34,7 +34,7 @@ async function getAppointments(id) {
     return appointments;
 }
 // user side
-router.post('/user/getall/:uid', uploadAppointment.none(),async (req, res) => {
+router.post('/user/getall/:uid', uploadAppointment.none(), async (req, res) => {
     try {
         console.log(req.params.uid)
         const appointments = await getAppointments(req.params.uid)
@@ -45,7 +45,7 @@ router.post('/user/getall/:uid', uploadAppointment.none(),async (req, res) => {
 })
 
 
-router.post('/nurse/getall/:uid', uploadAppointment.none(),async (req, res) => {
+router.post('/nurse/getall/:uid', uploadAppointment.none(), async (req, res) => {
     try {
 
         const appointments = await Appointment.find({ nurse: req.params.uid })
@@ -65,7 +65,7 @@ router.post('/nurse/getall/:uid', uploadAppointment.none(),async (req, res) => {
 })
 
 
-router.post('/get/:id', uploadAppointment.none(),async (req, res) => {
+router.post('/get/:id', uploadAppointment.none(), async (req, res) => {
     try {
         const id = req.params.id
         console.log(id)
@@ -76,46 +76,49 @@ router.post('/get/:id', uploadAppointment.none(),async (req, res) => {
     }
 })
 
-router.post('/accept', uploadAppointment.none(),async (req, res) => {
+router.post('/accept', uploadAppointment.none(), async (req, res) => {
     // if PIN from client side is correct, call this api
     try {
         const appointmentId = req.body.appointment_id
         const appointment = await Appointment.findOne({ _id: appointmentId })
         appointment.accepted = true
         appointment.ongoing = true
-        appointment.status='accepted'
+        appointment.status = 'accepted'
         await appointment.save()
-        res.status(200).send({ status:'success'})
+        res.status(200).send({ status: 'success' })
     } catch (err) {
         console.log(err)
         res.status(500).send(err)
     }
 })
-router.post('/reject', uploadAppointment.none(),async (req, res) => {
+router.post('/reject', uploadAppointment.none(), async (req, res) => {
     // if PIN from client side is correct, call this api
     try {
         const appointmentId = req.body.appointment_id
         const appointment = await Appointment.findOne({ _id: appointmentId })
         appointment.accepted = true
         appointment.ongoing = true
-        appointment.status='rejected'
+        appointment.status = 'rejected'
         await appointment.save()
-        res.status(200).send({ status:'success'})
+        res.status(200).send({ status: 'success' })
     } catch (err) {
         console.log(err)
         res.status(500).send(err)
     }
 })
 
-router.post('/finish',uploadAppointment.none(), async (req, res) => {
+router.post('/finish', uploadAppointment.none(), async (req, res) => {
     try {
         const appointmentId = req.body.appointment_id
         const appointment = await Appointment.findOne({ _id: appointmentId })
+        const nurse = await Nurse.findOne({ uid: appointment.nurse })
         appointment.ongoing = false
         appointment.completed = true
         appointment.status = 'completed'
+        nurse.balance += (appointment.amount * appointment.duration)
         console.log(appointment)
         await appointment.save()
+        await nurse.save()
         res.status(200).send({ status: 'success' })
     } catch (err) {
         res.status(500).send(err)

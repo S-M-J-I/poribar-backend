@@ -83,6 +83,7 @@ const getUser = async (uid, type) => {
     } else if (type === "nurse") {
         const user = await Nurse.findOne({ uid: uid })
         let imageFileBuffer = fs.readFileSync(path.join(__dirname, '../', `images/avatar/${user.avatar}`), 'base64')
+        console.log(user)
         user.avatar = imageFileBuffer
         return user
     }
