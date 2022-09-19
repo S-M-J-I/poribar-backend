@@ -77,7 +77,7 @@ router.post('/profile/update/:uid', uploadAvatar.single('avatar'), async (req, r
             await User.updateOne({ uid: req.params.uid }, { name, username, email, phone, gender, blood_group, password })
         }
 
-        if (user.email !== email || bcrypt.compare(password, user.password, (err, data) => {
+        if (user.email !== email || !bcrypt.compare(password, user.password, (err, data) => {
             if (err) {
                 return false
             }
