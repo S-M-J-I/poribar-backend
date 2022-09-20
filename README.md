@@ -11,40 +11,46 @@ It has 3 uses only: **login**, **signup**, and **logout**
 
 Here are some guidelines on using the API, covering how it works and what it returns for each path
 
-### [User Model](models/User.js)
 
-The User model contains onyl 3 fields at the moment: `name`, `email`, and `password`.
+- ### User
+  - #### User details
+    `/api/auth/user/profile/:uid`.  
+    Requirements: Pass user uid as params in `:uid`.
+    Returns: user details
 
-Whilst sending reponse data, only `name`, `email` will be sent.
+  - #### User signup
+    `/api/auth/user/signup`.
+    Requirements: pass user details in body
+    Returns: success message user was added
 
-### Authentication route(s)
+  - #### User profile update
+    `/api/auth/user/profile/update/:uid`.
+    Requirements: Pass user uid as params in `:uid`.
+    Returns: success message
+  
+  - #### User delete
+    `/api/auth/user/profile/remove/:uid`.
+    Requirements: Pass user uid as params in `:uid`.
+    Returns: success message
 
-There are 1 route for authentication:
 
-- `/poribar/auth/users/signup`
-- `/poribar/auth/users/login`
+- ### Nurse
+  - #### Nurse details
+    `/api/auth/nurse/profile/:uid`.  
+    Requirements: Pass nurse uid as params in `:uid`.
+    Returns: nurse details
+
+  - #### Nurse signup
+    `/api/auth/nurse/signup`.
+    Requirements: pass nurse details in body
+    Returns: success message nurse was added
+
+  - #### Nurse profile update
+    same as user
+  
+  - #### Nurse delete
+    `/api/auth/nurse/profile/remove/:uid`.
+    Requirements: Pass nurse uid as params in `:uid`.
+    Returns: success message
 
 
-#### Signup:
-
-Route: `/poribar/auth/users/signup`
-
-Method: `POST`
-
-Send: `name, email, password`
-
-Returns: `"Registered"`
-
-### Login
-
-Route: `/poribar/auth/users/login`
-
-Method: `POST`
-
-Send: `email and password`
-
-Returns: `custom token` 
-
-### Authorization
-
-Present in the auth file, just send the token in the body from the **Client-Side** using `firebase.auth().currentUser.getIdToken(true)` and send the token to the **Server-Side** as a **POST** request in the **Body**
