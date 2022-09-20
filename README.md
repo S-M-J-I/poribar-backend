@@ -1,10 +1,12 @@
 # Documentation
 
+## **IMPORTANT: NOTE ON CONTRIBUTING**
+We do not accept any kind of contributers/collaborators for this project other than [Jishan](https://github.com/S-M-J-I), [Latin](https://github.com/lchakma201232), [Tamanna](https://github.com/Tamanna130), and [Asif](https://github.com/AsifUchchas). This was done for our **System Analysis and Design Laboratory** course project.
+
+
 ## About the API
 
 This API was specifically made to provide authentication services to the 'Poribar' project.
-
-It has 3 uses only: **login**, **signup**, and **logout**
 
 
 ## Using the API
