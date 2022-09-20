@@ -40,6 +40,7 @@ router.post('/user/getall/:uid', uploadAppointment.none(), async (req, res) => {
         const appointments = await getAppointments(req.params.uid)
         res.status(200).send(appointments)
     } catch (err) {
+        console.log(err)
         res.status(500).send(err)
     }
 })

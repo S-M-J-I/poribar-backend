@@ -3,6 +3,7 @@ const admin = require('../firebase/firebaseAuth')
 const router = express.Router()
 const User = require('../models/User')
 const Nurse = require('../models/Nurse')
+const Appointments = require('../models/Appointments')
 const auth = require('../middleware/auth')
 const multer = require('multer')
 const uploadAvatar = multer({ dest: 'images/avatar' })
@@ -112,8 +113,14 @@ router.post('/profile/update/:uid', uploadAvatar.single('avatar'), async (req, r
 router.post('/profile/remove/:uid', uploadAvatar.none(), async (req, res) => {
     try {
         const user_uid = req.params.uid
+        const user = await User.findOne({ uid: user_uid })
         await User.deleteOne({ uid: user_uid })
         await admin.auth().deleteUser(uid)
+        if (user.type === 'user') {
+            await Appointments.deleteMany({ customer: user_uid })
+        } else if (user.type === 'nurse') {
+            await Appointments.deleteMany({ nurse: user_uid })
+        }
 
         res.status(201).send({ status: 'success' })
     } catch (err) {
