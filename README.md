@@ -10,7 +10,7 @@ This API was specifically made to provide authentication services to the 'Poriba
 
 
 ## Installing the API
-> npm clone https://github.com/S-M-J-I/poribar-backend
+> npm clone https://github.com/S-M-J-I/poribar-backend \
 > npm i
 
 
