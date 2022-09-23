@@ -9,6 +9,11 @@ We do not accept any kind of contributers/collaborators for this project other t
 This API was specifically made to provide authentication services to the 'Poribar' project.
 
 
+## Installing the API
+> npm clone https://github.com/S-M-J-I/poribar-backend
+> npm i
+
+
 ## Using the API
 
 Here are some guidelines on using the API, covering how it works and what it returns for each path
@@ -43,7 +48,7 @@ Here are some guidelines on using the API, covering how it works and what it ret
     Returns: nurse details
 
   - #### Nurse signup
-    `/api/auth/nurse/signup`.
+    `/api/auth/nurse/signup`. \
     Requirements: pass nurse details in body
     Returns: success message nurse was added
 
@@ -51,8 +56,23 @@ Here are some guidelines on using the API, covering how it works and what it ret
     same as user
   
   - #### Nurse delete
-    `/api/auth/nurse/profile/remove/:uid`.
+    `/api/auth/nurse/profile/remove/:uid`. \
     Requirements: Pass nurse uid as params in `:uid`.
     Returns: success message
 
 
+- ### Reports
+  - #### Get all reports of customer
+    `/api/reports/all/:uid` \
+    Requirements: Pass the user uid as params in `:uid`
+    Returns: user reports
+  
+  - #### Add Reports
+    `/api/reports/add/:uid` \
+    Requirements: Pass the user uid as param in `:uid`
+    Returns: report
+
+  - #### See individual report
+    `/api/reports/report/:id` \
+    Requirements: Pass the mongo id of the report as params
+    Return: an individual report
