@@ -22,34 +22,34 @@ Here are some guidelines on using the API, covering how it works and what it ret
 - ### User
   - #### User details
     `/api/auth/user/profile/:uid`.  
-    Requirements: Pass user uid as params in `:uid`.
+    Requirements: Pass user uid as params in `:uid`. \
     Returns: user details
 
   - #### User signup
-    `/api/auth/user/signup`.
-    Requirements: pass user details in body
+    `/api/auth/user/signup`. \
+    Requirements: pass user details in body \
     Returns: success message user was added
 
   - #### User profile update
-    `/api/auth/user/profile/update/:uid`.
-    Requirements: Pass user uid as params in `:uid`.
+    `/api/auth/user/profile/update/:uid`. \
+    Requirements: Pass user uid as params in `:uid`. \
     Returns: success message
   
   - #### User delete
-    `/api/auth/user/profile/remove/:uid`.
-    Requirements: Pass user uid as params in `:uid`.
+    `/api/auth/user/profile/remove/:uid`. \
+    Requirements: Pass user uid as params in `:uid`. \
     Returns: success message
 
 
 - ### Nurse
   - #### Nurse details
     `/api/auth/nurse/profile/:uid`.  
-    Requirements: Pass nurse uid as params in `:uid`.
+    Requirements: Pass nurse uid as params in `:uid`. \
     Returns: nurse details
 
   - #### Nurse signup
     `/api/auth/nurse/signup`. \
-    Requirements: pass nurse details in body
+    Requirements: pass nurse details in body \
     Returns: success message nurse was added
 
   - #### Nurse profile update
@@ -57,22 +57,22 @@ Here are some guidelines on using the API, covering how it works and what it ret
   
   - #### Nurse delete
     `/api/auth/nurse/profile/remove/:uid`. \
-    Requirements: Pass nurse uid as params in `:uid`.
+    Requirements: Pass nurse uid as params in `:uid`. \
     Returns: success message
 
 
 - ### Reports
   - #### Get all reports of customer
     `/api/reports/all/:uid` \
-    Requirements: Pass the user uid as params in `:uid`
+    Requirements: Pass the user uid as params in `:uid` \
     Returns: user reports
   
   - #### Add Reports
     `/api/reports/add/:uid` \
-    Requirements: Pass the user uid as param in `:uid`
+    Requirements: Pass the user uid as param in `:uid` \
     Returns: report
 
   - #### See individual report
     `/api/reports/report/:id` \
-    Requirements: Pass the mongo id of the report as params
+    Requirements: Pass the mongo id of the report as params \
     Return: an individual report
